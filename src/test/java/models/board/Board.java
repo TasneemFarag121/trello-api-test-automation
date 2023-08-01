@@ -3,9 +3,6 @@ package models.board;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
-import java.util.ArrayList;
-
-
 /**
  * Model class represent "Trello Board"
  */

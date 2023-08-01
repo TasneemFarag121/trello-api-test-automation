@@ -9,8 +9,6 @@ import testdata.TestData_Board;
 import testdata.TestData_ListOnBoard;
 
 import java.util.List;
-
-import static io.restassured.RestAssured.given;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.testng.Assert.assertEquals;

@@ -6,13 +6,9 @@ import io.restassured.response.Response;
 import models.board.Board;
 import models.board.DeleteBoardResponse;
 import models.board.GetBoardsResponse;
-import models.board_list.BoardList;
-import org.testng.annotations.AfterTest;
 import org.testng.annotations.Test;
 import testdata.TestData_Board;
 
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
