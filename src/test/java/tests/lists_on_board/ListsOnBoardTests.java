@@ -3,11 +3,12 @@ package tests.lists_on_board;
 import apis.BoardApi;
 import apis.ListApi;
 import io.restassured.response.Response;
-import models.ListOnBoard;
-import org.hamcrest.Matchers;
+import models.board_list.BoardList;
 import org.testng.annotations.Test;
 import testdata.TestData_Board;
 import testdata.TestData_ListOnBoard;
+
+import java.util.List;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -24,20 +25,25 @@ public class ListsOnBoardTests {
         Response response = ListApi.createListOnBoard(boardId,listName);
         response.prettyPrint();
 
-        // Cannot parse object because no supported Content-Type was specified in response. Content-Type was 'text/plain; charset=utf-8'.
-        // ListOnBoard returnedResponse = response.body().as(ListOnBoard.class);
         System.out.println("BoardId : "+ boardId);
         System.out.println("ListName : "+ listName);
-
         assertThat(response.statusCode() ,equalTo(200));
+
+        // Assertion using Json response
         assertThat(response.body().path("$"),hasKey("id"));
         assertThat(response.body().path("$"),hasKey("name"));
         assertThat(response.body().path("$"),hasKey("idBoard"));
         assertThat(response.body().path("closed"),equalTo(false));
-        assertThat(response.body().path("limits"), Matchers.notNullValue());
-        //List<Limit> limits = objectMapper.readValue(response.body().path("limits"), new TypeReference<List<Limit>>() {});
-        //assertThat(limits, contains(empty()));
-        //assertThat((response.body().path("limits")),Matchers.hasSize(-));
+        assertThat(response.body().path("limits").toString(), equalTo("{}"));
+
+        // Deserialization
+        BoardList boardList = response.body().as(BoardList.class);
+
+        // Assertion using Deserialized Object
+        assertThat(boardList,hasProperty("id"));
+        assertThat(boardList.getClosed(),equalTo(false));
+        assertThat(boardList.getLimits().toString(), equalTo("{}"));
+
 
         BoardApi.deleteBoard(boardId);
 
@@ -50,12 +56,11 @@ public class ListsOnBoardTests {
         Response response = ListApi.getListsOnBoard(boardId);
 
         assertThat(response.statusCode() ,equalTo(200));
-        assertThat(response.body().path("$"),hasSize(3));
 
-//        ListOnBoard returnedResponse = response.body().as(ListOnBoard.class);
-//        assertThat(returnedResponse.getListsOnBoard().size() ,equalTo(3));
+        List<BoardList> listsOnBoard = response.body().as(List.class);
+
+        assertThat(listsOnBoard.size() ,equalTo(3));
         BoardApi.deleteBoard(boardId);
-
     }
 
     @Test
@@ -74,7 +79,7 @@ public class ListsOnBoardTests {
         assertThat(response.header("Set-Cookie"),containsString("isEnterpriseAdmin%3Dfalse"));
 
         //Deserilization
-        ListOnBoard returnedResponse = response.body().as(ListOnBoard.class);
+        BoardList returnedResponse = response.body().as(BoardList.class);
         assertEquals(returnedResponse.getClosed(),true);
 
         //Delete Test Data
@@ -92,7 +97,7 @@ public class ListsOnBoardTests {
         assertThat(response.body().path("closed"),equalTo(false));
         assertThat(response.header("Set-Cookie"),containsString("isEnterpriseAdmin%3Dfalse"));
 
-        ListOnBoard returnedResponse = response.body().as(ListOnBoard.class);
+        BoardList returnedResponse = response.body().as(BoardList.class);
         assertEquals(returnedResponse.getClosed(),false);
         BoardApi.deleteBoard(boardId);
 

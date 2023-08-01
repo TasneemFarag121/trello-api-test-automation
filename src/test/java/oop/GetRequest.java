@@ -10,11 +10,6 @@ public class GetRequest extends ApiRequest {
         super(baseUri,basePath);
 
     }
-    //[Q]
-//    public void addQueryParameter(String parameter , String value){
-//        request.queryParam(parameter, value);
-//
-//    }
 
     public Response send(){
         return request.get();

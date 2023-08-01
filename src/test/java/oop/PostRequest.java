@@ -14,13 +14,8 @@ public class PostRequest extends ApiRequest{
         request.formParam(parameter, value);
 
     }
-    // [Q]
-    //    public void addBody(String parameter , String value){
-//        request.queryParam(parameter, value);
-//
-//    }
 
-
+    @Override
     public Response send(){
         return request.post();
 

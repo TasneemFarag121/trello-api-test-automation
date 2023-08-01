@@ -15,11 +15,7 @@ public class PutRequest extends ApiRequest {
         request.formParam(parameter, value);
 
     }
-    // [Q]
-    //    public void addBody(String parameter , String value){
-//        request.queryParam(parameter, value);
-//
-//    }
+
     public Response send(){
         return request.put();
 
